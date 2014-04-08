@@ -1,0 +1,48 @@
+from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.selector import HtmlXPathSelector
+from bball.items import BballItem
+
+class StatSpider(CrawlSpider):
+    name = "gophers"
+    allowed_domains = ["stats.ncaa.org"]
+    start_urls = ["http://stats.ncaa.org/team/roster/11540?org_id=428"]
+    #extractor = SgmlLinkExtractor()
+    rules = [
+        Rule(SgmlLinkExtractor(restrict_xpaths=('/html/body/div[2]/div[2]/table/tbody')),follow=True),
+        Rule(SgmlLinkExtractor(unique=True),callback='parse_item'),
+    ]
+
+    def parse_item(self, response):
+        hxs = HtmlXPathSelector(response)
+        sites = hxs.select('.//*[@id="game_breakdown_div"]/table/tbody/tr/td/table/tbody/tr').extract()       
+        items = []
+        for site in sites:
+            item = BballItem()
+            item['NAME'] = hxs.select('.//*[@id="stats_player_person_id"]/option[@selected]/text()').extract()
+            item['POS'] = hxs.select('.//*[@id="stats_player_person_id"]/option[@selected]/text()').extract()
+            item['DATE'] = hxs.select('/td/text()').extract()
+            item['OPP'] = hxs.select('/td[2]/a/text()').extract()
+            item['WL'] = hxs.select('/td[3]/a/text()').extract()
+            item['SCORE'] = hxs.select('/td[3]/a/text()').extract()
+            item['MP'] = hxs.select('/td[4]/div/text()').extract()
+            item['FGM'] = hxs.select('/td[5]/div/text()').extract()
+            item['FGA'] = hxs.select('/td[6]/div/text()').extract()
+            item['FGP'] = hxs.select('/td[]/div/text()').extract()
+            item['iiiFG'] = hxs.select('/td[7]/div/text()').extract()
+            item['iiiFGA'] = hxs.select('/td[8]/div/text()').extract()
+            item['iiiFGP'] = hxs.select('/td[]/div/text()').extract()
+            item['FT'] = hxs.select('/td[9]/div/text()').extract()
+            item['FTA'] = hxs.select('/td[10]/div/text()').extract()
+            item['FTP'] = hxs.select('/td[]/div/text()').extract()
+            item['PTS'] = hxs.select('/td[11]/div/text()').extract()
+            item['OREB'] = hxs.select('/td[12]/div/text()').extract()
+            item['DREB'] = hxs.select('/td[13]/div/text()').extract()
+            item['REB'] = hxs.select('/td[14]/div/text()').extract()
+            item['AST'] = hxs.select('/td[15]/div/text()').extract()
+            item['TO'] = hxs.select('/td[16]/div/text()').extract()
+            item['STL'] = hxs.select('/td[17]/div/text()').extract()
+            item['BLK'] = hxs.select('/td[18]/div/text()').extract()
+            item['FOULS'] = hxs.select('/td[19]/div/text()').extract()
+            items.append(item)
+        return items
