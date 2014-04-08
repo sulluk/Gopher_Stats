@@ -6,8 +6,8 @@ from bball.items import BballItem
 class StatSpider(CrawlSpider):
     name = "gophers"
     allowed_domains = ["stats.ncaa.org"]
+    COOKIES_Enabled = False
     start_urls = ["http://stats.ncaa.org/team/roster/11540?org_id=428"]
-    #extractor = SgmlLinkExtractor()
     rules = [
         Rule(SgmlLinkExtractor(restrict_xpaths=('/html/body/div[2]/div[2]/table/tbody')),follow=True),
         Rule(SgmlLinkExtractor(unique=True),callback='parse_item'),
