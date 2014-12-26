@@ -8,12 +8,12 @@ class LiveSpider(scrapy.Spider):
     name = "team"
     cookies_enabled = False
     allowed_domains = ["http://scores.espn.go.com"]
-#    start_urls = (
-#        'http://scores.espn.go.com/ncb/boxscore?gameId=400585728',
-#    )
     start_urls = (
-        raw_input(['Paste ESPN Mens BBall game url like: http://scores.espn.go.com/ncb/boxscore?gameId=400585728']),
+        'http://scores.espn.go.com/ncb/boxscore?gameId=400585728',
     )
+#    start_urls = (
+#        raw_input(['Paste ESPN Mens BBall game url like: http://scores.espn.go.com/ncb/boxscore?gameId=400585728']),
+#    )
 
     def parse(self, response):
         sel = Selector(response)
