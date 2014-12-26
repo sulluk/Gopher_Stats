@@ -1,9 +1,0 @@
-BOT_NAME = 'bball'
-DOWNLOAD_DELAY = .5
-SPIDER_MODULES = ['bball.spiders']
-NEWSPIDER_MODULE = 'bball.spiders'
-ITEM_PIPELINES = [
-    'bball.pipelines.bballpipeline'
-]
-FEED_FORMAT = 'csv'
-FEED_URI = 'outputs/SeasonStats_%(time)s.csv'
